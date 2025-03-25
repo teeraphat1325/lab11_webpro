@@ -11,9 +11,9 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>,
-  ) {}
+  ) { }
 
-  async create(createProductDto: CreateProductDto): Promise<Product> {
+  async create(createProductDto: CreateProductDto & { imageUrl: string },): Promise<Product> {
     const newProduct = this.productsRepository.create(createProductDto);
     await this.productsRepository.save(newProduct);
     return this.productsRepository.findOneOrFail({

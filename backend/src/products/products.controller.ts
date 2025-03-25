@@ -29,7 +29,7 @@ export class ProductsController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads', //save ที่ไหน
+        destination: './uploads/products', //save ที่ไหน
         filename: (req, file, callback) => {
           console.log(file);
           const uniqueFileName = uuidv4() + extname(file.originalname);
@@ -41,7 +41,7 @@ export class ProductsController {
   create(@UploadedFile() file: Express.Multer.File,
     @Body() createProductDto: CreateProductDto) {
     console.log(file);
-    return this.productsService.create(createProductDto);
+    return this.productsService.create({ ...createProductDto, imageUrl: file ? '/product-images/' + file.filename : '/product-images/unknown.jpg' });
   }
 
   @Get()
