@@ -6,17 +6,41 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
+import { extname } from 'path';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
+  @ApiOperation({ summary: 'สร้างสินค้าใหม่' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ description: 'ข้อมูลสินค้า', type: CreateProductDto })
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads', //save ที่ไหน
+        filename: (req, file, callback) => {
+          console.log(file);
+          const uniqueFileName = uuidv4() + extname(file.originalname);
+          callback(null, uniqueFileName);
+        },
+      }),
+    }),
+  )
+  create(@UploadedFile() file: Express.Multer.File,
+    @Body() createProductDto: CreateProductDto) {
+    console.log(file);
     return this.productsService.create(createProductDto);
   }
 
