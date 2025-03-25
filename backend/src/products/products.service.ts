@@ -37,8 +37,13 @@ export class ProductsService {
 
   async update(
     id: number,
-    updateProductDto: UpdateProductDto,
+    updateProductDto: UpdateProductDto & { imageUrl?: string },
   ): Promise<Product> {
+    console.log(updateProductDto);
+    if (!updateProductDto.imageUrl) {
+      delete updateProductDto.file;
+      delete updateProductDto.imageUrl;
+    }
     await this.productsRepository.update(id, updateProductDto);
     const updatedProduct = await this.productsRepository.findOneByOrFail({
       id,
