@@ -7,10 +7,12 @@ export interface Type {
 }
 
 export interface Product {
-  id: number
+  id?: number
   name: string
-  category: 'drink' | 'bakery'
+  typeId: number
   price: number
+  type?: Type
+  imageUrl?: string
 }
 
 export interface User {

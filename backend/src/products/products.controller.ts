@@ -70,7 +70,10 @@ export class ProductsController {
       }),
     }),
   )
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, file: Express.Multer.File,) {
+  update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+    @UploadedFile() file: Express.Multer.File,) {
     console.log(file);
     return this.productsService.update(+id, { ...updateProductDto, imageUrl: file ? '/product-images/' + file.filename : undefined });
   }
