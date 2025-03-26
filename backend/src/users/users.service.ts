@@ -14,7 +14,7 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
     @InjectRepository(Role)
     private readonly rolesRepository: Repository<Role>,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const errors = await validate(createUserDto);
@@ -37,6 +37,15 @@ export class UsersService {
   async findOne(id: number): Promise<User> {
     const user = await this.usersRepository.findOneOrFail({
       where: { id },
+      relations: ['roles'],
+    });
+
+    return user;
+  }
+
+  async findOneByLogin(login: string): Promise<User> {
+    const user = await this.usersRepository.findOneOrFail({
+      where: { login },
       relations: ['roles'],
     });
 

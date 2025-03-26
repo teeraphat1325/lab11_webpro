@@ -20,7 +20,7 @@ import { extname } from 'path';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) { }
+  constructor(private readonly productsService: ProductsService) {}
 
   @Post()
   @ApiOperation({ summary: 'สร้างสินค้าใหม่' })
@@ -38,10 +38,17 @@ export class ProductsController {
       }),
     }),
   )
-  create(@UploadedFile() file: Express.Multer.File,
-    @Body() createProductDto: CreateProductDto) {
+  create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createProductDto: CreateProductDto,
+  ) {
     console.log(file);
-    return this.productsService.create({ ...createProductDto, imageUrl: file ? '/product-images/' + file.filename : '/product-images/unknown.jpg' });
+    return this.productsService.create({
+      ...createProductDto,
+      imageUrl: file
+        ? '/product-images/' + file.filename
+        : '/product-images/unknown.jpg',
+    });
   }
 
   @Get()
@@ -73,9 +80,13 @@ export class ProductsController {
   update(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
-    @UploadedFile() file: Express.Multer.File,) {
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     console.log(file);
-    return this.productsService.update(+id, { ...updateProductDto, imageUrl: file ? '/product-images/' + file.filename : undefined });
+    return this.productsService.update(+id, {
+      ...updateProductDto,
+      imageUrl: file ? '/product-images/' + file.filename : undefined,
+    });
   }
 
   @Delete(':id')

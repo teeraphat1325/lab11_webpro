@@ -24,7 +24,7 @@ class UploadedFileDto {
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   getDefault(): string {
@@ -62,7 +62,6 @@ export class AppController {
     return { celsius };
   }
 
-
   @Post('upload')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
@@ -75,10 +74,12 @@ export class AppController {
           callback(null, uniqueFileName);
         },
       }),
-    }))
-  uploadFile(@UploadedFile() file: Express.Multer.File, @Body() body: UploadedFileDto,) {
+    }),
+  )
+  uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: UploadedFileDto,
+  ) {
     console.log(file.filename);
   }
-
 }
-

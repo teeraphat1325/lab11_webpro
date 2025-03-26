@@ -19,7 +19,12 @@ export class CreateProductDto {
   @Min(0)
   typeId: number;
 
-  @ApiProperty({ type: 'string', format: 'binary', description: 'รูปภาพสินค้า', required: false, })
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'รูปภาพสินค้า',
+    required: false,
+  })
   @IsOptional()
   file?: string;
 }
